@@ -1,3 +1,4 @@
+![BuildStatus](https://github.com/apblair/project6/actions/workflows/main.yml/badge.svg?event=push)
 # Project 6
 Logistic regression and application to medical record data
 
