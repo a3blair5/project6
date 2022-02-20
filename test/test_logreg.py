@@ -5,6 +5,7 @@ Write your logreg unit tests here. Some examples of tests we will be looking for
 
 More details on potential tests below, these are not exhaustive
 """
+from regression import *
 
 def test_updates():
 	"""
@@ -24,3 +25,10 @@ def test_predict():
 	# Check accuracy of model after training
 
 	pass
+
+def test_dev():
+	X_train, X_test, y_train, y_test = utils.loadDataset(split_percent=0.8)
+	print(X_train.shape)
+	print(y_train.shape)
+
+test_dev()
