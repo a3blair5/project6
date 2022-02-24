@@ -127,7 +127,7 @@ class LogisticRegression(BaseRegressor):
         """
         n = len(y)
         y_i = self.make_prediction(X)
-        binary_cross_entropy_log_loss = - 1/n * ((y.dot(np.log(y_i+self.epsilon))) + ((1-y).dot(np.log(1-y_i+self.epsilon))))
+        binary_cross_entropy_log_loss = - 1/n * ((y * (np.log(y_i+self.epsilon))) + ((1-y) * (np.log(1-y_i+self.epsilon)))) # add epssilon log function to prevent log(0)
         return binary_cross_entropy_log_loss.mean()
     
     def make_prediction(self, X) -> np.array:
