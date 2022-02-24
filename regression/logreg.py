@@ -88,6 +88,7 @@ class BaseRegressor():
         axs[0].set_ylabel('Train Loss')
         axs[1].set_ylabel('Val Loss')
         fig.tight_layout()
+        fig.savefig('regression.pdf')
 
 class LogisticRegression(BaseRegressor):
     def __init__(self, num_feats, learning_rate=0.1, tol=0.0001, max_iter=100, batch_size=12, epsilon=1e-5):
@@ -147,6 +148,9 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             y_pred for given X
         """
+        # Adding bias term 
+        if X.shape[1] == self.num_feats:
+            X = np.hstack([X, np.ones((X.shape[0], 1))])
         x = X.dot(self.W).flatten()
         sigmoid = 1 / (1 + np.exp(-x))
         return sigmoid
