@@ -1,10 +1,9 @@
-# importing dependencies
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 class BaseRegressor():
-    def __init__(self, num_feats, learning_rate=0.1, tol=0.001, max_iter=100, batch_size=12):
+    def __init__(self, num_feats, learning_rate=0.1, tol=0.001, max_iter=100, batch_size=12, epsilon=1e-5):
         # initializing parameters
         self.W = np.random.randn(num_feats + 1).flatten()
         # assigning hyperparameters
@@ -13,6 +12,7 @@ class BaseRegressor():
         self.max_iter = max_iter
         self.batch_size = batch_size
         self.num_feats = num_feats
+        self.epsilon = epsilon
         # defining list for storing loss history
         self.loss_history_train = []
         self.loss_history_val = []
@@ -88,16 +88,14 @@ class BaseRegressor():
         axs[0].set_ylabel('Train Loss')
         axs[1].set_ylabel('Val Loss')
         fig.tight_layout()
-        
 
-# import required modules
 class LogisticRegression(BaseRegressor):
-    def __init__(self, num_feats, learning_rate=0.1, tol=0.0001, max_iter=100, batch_size=12):
-        super().__init__(num_feats, learning_rate, tol, max_iter, batch_size)
+    def __init__(self, num_feats, learning_rate=0.1, tol=0.0001, max_iter=100, batch_size=12, epsilon=1e-5):
+        super().__init__(num_feats, learning_rate, tol, max_iter, batch_size, epsilon)
         
     def calculate_gradient(self, X, y) -> np.ndarray:
         """
-        TODO: write function to calculate gradient of the
+        Calculate gradient of the
         logistic loss function to update the weights 
 
         Params:
@@ -107,11 +105,15 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             gradients for given loss function (np.ndarray)
         """
-        pass
+        m = len(y)
+        y_i = self.make_prediction(X)
+        error = y - y_i
+        gradient = -X.T.dot(error) / m
+        return gradient
     
     def loss_function(self, X, y) -> float:
         """
-        TODO: get y_pred from input X and implement binary cross 
+        Get y_pred from input X and implement binary cross 
         entropy loss function. Binary cross entropy loss assumes that 
         the classification is either 1 or 0, not continuous, making
         it more suited for (binary) classification.
@@ -123,11 +125,14 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             average loss 
         """
-        pass
+        n = len(y)
+        y_i = self.make_prediction(X)
+        binary_cross_entropy_log_loss = - 1/n * ((y.dot(np.log(y_i+self.epsilon))) + ((1-y).dot(np.log(1-y_i+self.epsilon))))
+        return binary_cross_entropy_log_loss.mean()
     
     def make_prediction(self, X) -> np.array:
         """
-        TODO: implement logistic function to get estimates (y_pred) for input
+        Implement logistic function to get estimates (y_pred) for input
         X values. The logistic function is a transformation of the linear model W.T(X)+b 
         into an "S-shaped" curve that can be used for binary classification
 
@@ -137,9 +142,6 @@ class LogisticRegression(BaseRegressor):
         Returns: 
             y_pred for given X
         """
-
-        pass
-
-
-
-    
+        x = X.dot(self.W).flatten()
+        sigmoid = 1 / (1 + np.exp(-x))
+        return sigmoid
