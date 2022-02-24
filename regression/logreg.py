@@ -123,13 +123,17 @@ class LogisticRegression(BaseRegressor):
             y (np.array): labels corresponding to X
 
         Returns: 
-            average loss 
+            average loss
+        
+        References: 
+        https://stackoverflow.com/questions/38125319/python-divide-by-zero-encountered-in-log-logistic-regression
         """
         n = len(y)
         y_i = self.make_prediction(X)
         # NOTE: this is not a vectorized BCE
-        binary_cross_entropy_log_loss = - 1/n * ((y * (np.log(y_i+self.epsilon))) + ((1-y) * (np.log(1-y_i+self.epsilon)))) # add epsilon to log function to prevent log(0)
-        return binary_cross_entropy_log_loss.mean()
+        binary_cross_entropy_log_loss = - np.average(y * np.log(y_i + self.epsilon) + (1 - y_i) * np.log(1 - y_i + self.epsilon)) # add epsilon to log function to prevent log(0)
+        # binary_cross_entropy_log_loss = - ((y * (np.log(y_i+self.epsilon))) + ((1-y) * (np.log(1-y_i+self.epsilon)))) 
+        return binary_cross_entropy_log_loss
     
     def make_prediction(self, X) -> np.array:
         """
