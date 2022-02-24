@@ -41,8 +41,6 @@ def test_updates():
 def test_predict():
 	"""
 	Unit test to check model weights, NSCLC estimates, and accuracy of the model after training
-	References:
-	https://www.geeksforgeeks.org/python-test-if-list-contains-elements-in-range/
 	"""
 	
 	# Check that self.W is being updated as expected
@@ -59,8 +57,8 @@ def test_predict():
 	# Check if predictions are between 0 and 1
 	y_predicted = lr_weight_check.make_prediction(X_test)
 	i, j = 0, 1
-	for ele in y_predicted:
-		if ele < i or ele >= j :
+	for predicted in y_predicted:
+		if predicted < i or predicted >= j :
 			raise ValueError("Error: prediction not in predicted range [0,1].")
 	assert np.round(np.min(y_predicted),1) == 0, "Assessment Check: The model is not producting reasonable estimates for NSCLC classification"
 	assert np.round(np.max(y_predicted), 1) == 1, "Assessment Check: The model is not producing reasonable estimates for NSCLC classification." 
