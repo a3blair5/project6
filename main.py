@@ -4,7 +4,6 @@ from regression import (logreg, utils)
 from sklearn.preprocessing import StandardScaler
 
 def main():
-
     # load data with default settings
     X_train, X_val, y_train, y_val = utils.loadDataset(features=['Penicillin V Potassium 500 MG', 'Computed tomography of chest and abdomen', 
                                     'Plain chest X-ray (procedure)',  'Low Density Lipoprotein Cholesterol', 
